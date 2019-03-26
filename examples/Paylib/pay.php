@@ -15,7 +15,7 @@ use Wirecard\PaymentSdk\Entity\Amount;
 use Wirecard\PaymentSdk\Entity\AccountHolder;
 use Wirecard\PaymentSdk\Entity\Redirect;
 use Wirecard\PaymentSdk\Response\FailureResponse;
-use Wirecard\PaymentSdk\Response\InteractionResponse;
+use Wirecard\PaymentSdk\Response\FormInteractionResponse;
 use Wirecard\PaymentSdk\Transaction\PaylibTransaction;
 use Wirecard\PaymentSdk\TransactionService;
 
@@ -48,15 +48,25 @@ $transaction->setRedirect($redirect);
 $transactionService = new TransactionService($config);
 $response = $transactionService->pay($transaction);
 
-
 // ## Response handling
 
 // The response from the service can be used for disambiguation.
 // In case of a successful transaction, a `InteractionResponse` object is returned including the payload
 // information for redirect.
-if ($response instanceof InteractionResponse) {
-    die("<meta http-equiv='refresh' content='0;url={$response->getRedirectUrl()}'>");
-
+if ($response instanceof FormInteractionResponse) {
+	// A form for redirect should be created and submitted afterwards.
+    ?>
+    <form method="<?= $response->getMethod(); ?>" action="<?= $response->getUrl(); ?>">
+        <?php foreach ($response->getFormFields() as $key => $value): ?>
+            <input type="hidden" name="<?= $key ?>" value="<?= $value ?>">
+        <?php endforeach;
+        // Usually an automated transmission of the form would be made.
+        // For a better demonstration and for the ease of use this automated submit
+        // is replaced with a submit button.
+        ?>
+		<button type="submit" class="btn btn-primary">Redirect to Paylib</button>
+    </form>
+ <?php
 // In case of a failed transaction, a `FailureResponse` object is returned.
 } elseif ($response instanceof FailureResponse) {
     // In our example we iterate over all errors and echo them out.

@@ -44,6 +44,7 @@ use Wirecard\PaymentSdk\Response\PendingResponse;
 use Wirecard\PaymentSdk\Response\Response;
 use Wirecard\PaymentSdk\Response\SuccessResponse;
 use Wirecard\PaymentSdk\Transaction\CreditCardTransaction;
+use Wirecard\PaymentSdk\Transaction\PaylibTransaction;
 use Wirecard\PaymentSdk\Transaction\Transaction;
 
 /**
@@ -288,6 +289,18 @@ class ResponseMapper
         }
 
         $paymentMethod = $this->getPaymentMethod();
+		if (strval($paymentMethod['name']) === PaylibTransaction::NAME) {
+			$fields = new FormFieldMap();
+			
+			foreach($paymentMethod->payload->{'payload-field'} as $payload) {
+				$fields->add(strval($payload['field-name']), strval($payload['field-value']));
+			}
+		
+			$response = new FormInteractionResponse($this->simpleXml, strval($paymentMethod['url']));
+			$response->setFormFields($fields);
+			
+			return $response;
+		}
 
         if (isset($paymentMethod['url'])) {
             return new InteractionResponse($this->simpleXml, (string)$paymentMethod['url']);
