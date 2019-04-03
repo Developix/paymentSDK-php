@@ -26,6 +26,7 @@ use Wirecard\PaymentSdk\Transaction\PtwentyfourTransaction;
 use Wirecard\PaymentSdk\Transaction\CreditCardMotoTransaction;
 use Wirecard\PaymentSdk\Transaction\UpopTransaction;
 use Wirecard\PaymentSdk\Transaction\PayByBankAppTransaction;
+use Wirecard\PaymentSdk\Transaction\PaylibTransaction;
 
 // ## Connection
 
@@ -187,3 +188,8 @@ $pbbaMAID = '70055b24-38f1-4500-a3a8-afac4b1e3249';
 $pbbaSecret = '	4a4396df-f78c-44b9-b8a0-b72b108ac465';
 $pbbaConfig = new PaymentMethodConfig(PayByBankAppTransaction::NAME, $pbbaMAID, $pbbaSecret);
 $config->add($pbbaConfig);
+
+$paylibMAID = '40427a1a-0607-409e-9680-a838979985db';
+$paylibKey = 'NO-SECRET-PROVIDED';
+$paylibConfig = new PaymentMethodConfig(PaylibTransaction::NAME, $paylibMAID, $paylibKey);
+$config->add($paylibConfig);
