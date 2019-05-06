@@ -57,6 +57,11 @@ class FormFieldMap implements \IteratorAggregate
      */
     public function add($key, $value)
     {
+        // Workaround for Paylib
+        if ($key == 'internalContext' && $value == '') {
+            $value = 'wirecard';
+        }
+
         $this->formFields[$key] = $value;
 
         return $this;
