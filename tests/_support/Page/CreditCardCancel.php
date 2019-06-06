@@ -22,20 +22,4 @@ class CreditCardCancel extends Base
         'Transaction Identification' => "//div[contains(@class, 'content')]/a",
         'Noted Transaction Identification' => ''
     );
-
-    /**
-     * Method prepareDataForField
-     *
-     * @param string $fieldValue
-     * @param string $valueToKeepBetweenSteps
-     * @return string
-     */
-    public function prepareDataForField($fieldValue, $valueToKeepBetweenSteps)
-    {
-        if (strpos($fieldValue, "Noted") !== false) {
-            return $valueToKeepBetweenSteps;
-        } else {
-            return $fieldValue;
-        }
-    }
 }
